@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleME — Your Closet, Styled by AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #FAF7F2;
+    --ink: #1A1714;
+    --warm: #C4956A;
+    --warm-light: #E8D5C0;
+    --warm-deep: #9B6B42;
+    --blush: #E8C4B8;
+    --sage: #8B9E82;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: rgba(250, 247, 242, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26, 23, 20, 0.06);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--warm); }
+
+  nav a {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0.6rem 1.4rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 100px;
+    transition: all 0.3s ease;
+  }
+
+  nav a:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-deep);
+    background: var(--warm-light);
+    padding: 0.5rem 1.2rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    max-width: 800px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--warm-deep);
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #6B6560;
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  /* ── EMAIL FORM ── */
+  .email-form {
+    display: flex;
+    gap: 0.75rem;
+    animation: fadeUp 0.8s ease 0.45s both;
+  }
+
+  .email-form input {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.9rem 1.4rem;
+    border: 1.5px solid rgba(26, 23, 20, 0.15);
+    border-radius: 100px;
+    background: white;
+    width: 300px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .email-form input:focus {
+    border-color: var(--warm);
+  }
+
+  .email-form input::placeholder { color: #B5AFA8; }
+
+  .btn-primary {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.9rem 2rem;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover {
+    background: var(--warm-deep);
+    transform: translateY(-1px);
+  }
+
+  .hero-note {
+    font-size: 0.8rem;
+    color: #A09A93;
+    margin-top: 1rem;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  .success-msg {
+    display: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--sage);
+    padding: 1rem;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .features-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-deep);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .features h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+    font-weight: 400;
+    margin-bottom: 4rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(26, 23, 20, 0.06);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--warm), var(--blush));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(26, 23, 20, 0.08);
+  }
+
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    background: var(--warm-light);
+  }
+
+  .feature-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #6B6560;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-it-works {
+    padding: 6rem 2rem;
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .how-it-works-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .how-it-works .features-label { color: var(--warm); }
+
+  .how-it-works h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    margin-bottom: 4rem;
+  }
+
+  .steps {
+    display: flex;
+    gap: 2rem;
+    text-align: left;
+  }
+
+  .step {
+    flex: 1;
+    position: relative;
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(250, 247, 242, 0.15);
+  }
+
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--warm);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .step h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .step p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(250, 247, 242, 0.6);
+  }
+
+  /* ── CTA ── */
+  .cta {
+    padding: 6rem 2rem;
+    text-align: center;
+  }
+
+  .cta h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .cta p {
+    color: #6B6560;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+  }
+
+  .cta .email-form {
+    justify-content: center;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: #A09A93;
+    border-top: 1px solid rgba(26, 23, 20, 0.06);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .email-form {
+      flex-direction: column;
+      align-items: center;
+    }
+    .email-form input { width: 100%; max-width: 340px; }
+    .btn-primary { width: 100%; max-width: 340px; }
+    .steps { flex-direction: column; }
+    .features-grid { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Style<span>ME</span></div>
+  <a href="#early-access">Get Early Access</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Coming Soon — Join the Waitlist</div>
+  <h1>Your closet.<br><em>Finally styled.</em></h1>
+  <p>StyleME uses AI to turn the clothes you already own into outfits you'll actually love — personalized to your style, every single morning.</p>
+
+  <div class="email-form" id="heroForm">
+    <input type="email" id="heroEmail" placeholder="Enter your email" required>
+    <button class="btn-primary" onclick="handleSignup('heroForm', 'heroEmail', 'heroSuccess')">Join Waitlist</button>
+  </div>
+  <div class="success-msg" id="heroSuccess">You're in! We'll be in touch soon. ✨</div>
+  <p class="hero-note">Free early access · No spam · Unsubscribe anytime</p>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <p class="features-label">What StyleME Does</p>
+  <h2>Stop buying. Start styling.</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📸</div>
+      <h3>Snap your wardrobe</h3>
+      <p>Photograph your clothes and our AI instantly categorizes everything — type, color, pattern, season. Your entire closet, digitized in minutes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <h3>AI-powered outfits</h3>
+      <p>Tell us the occasion and we'll generate complete outfits from YOUR clothes — styled to your taste, tuned to today's weather.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>Shop the gap</h3>
+      <p>We'll pinpoint the one piece that unlocks 10 new outfits. Smart shopping, not more shopping.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📌</div>
+      <h3>Pinterest, meet your closet</h3>
+      <p>Save an outfit on Pinterest? We'll show you how to recreate it with what you already own — or find the missing pieces.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <div class="how-it-works-inner">
+    <p class="features-label">How It Works</p>
+    <h2>Three steps to never say "I have nothing to wear" again</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Photograph your clothes</h3>
+        <p>Snap photos of your wardrobe items. Our AI handles the rest — identifying type, color, and style automatically.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Set your style</h3>
+        <p>Take a quick style quiz so we understand your aesthetic, your lifestyle, and what makes you feel great.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Get styled every morning</h3>
+        <p>Open the app, see today's outfit. Swipe through options, save your favorites, and walk out the door confident.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta" id="early-access">
+  <h2>Be the first to try StyleME</h2>
+  <p>Join 0 others on the waitlist. Early members get free premium access.</p>
+  <div class="email-form" id="ctaForm">
+    <input type="email" id="ctaEmail" placeholder="Enter your email" required>
+    <button class="btn-primary" onclick="handleSignup('ctaForm', 'ctaEmail', 'ctaSuccess')">Get Early Access</button>
+  </div>
+  <div class="success-msg" id="ctaSuccess">You're in! We'll be in touch soon. ✨</div>
+</section>
+
+<footer>
+  &copy; 2026 StyleME. Built with taste.
+</footer>
+
+<script>
+  function handleSignup(formId, emailId, successId) {
+    const email = document.getElementById(emailId).value;
+    if (!email || !email.includes('@')) return;
+
+    // Replace this with your actual form endpoint (Typeform, Mailchimp, ConvertKit, etc.)
+    console.log('Signup:', email);
+
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById(successId).style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
