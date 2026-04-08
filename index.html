@@ -481,12 +481,15 @@
     const email = document.getElementById(emailId).value;
     if (!email || !email.includes('@')) return;
 
-    // Replace this with your actual form endpoint (Typeform, Mailchimp, ConvertKit, etc.)
-    console.log('Signup:', email);
+   fetch('https://formspree.io/f/mojpbgwd', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email })
+  });
 
-    document.getElementById(formId).style.display = 'none';
-    document.getElementById(successId).style.display = 'block';
-  }
+  document.getElementById(formId).style.display = 'none';
+  document.getElementById(successId).style.display = 'block';
+}
 </script>
 
 </body>
